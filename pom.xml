@@ -47,7 +47,7 @@
 						<workers>${workers}</workers>
 						<workerType>${workerType}</workerType>
 						<properties>
-							<env>${mule.env}</env>
+							<mule.env>${mule.env}</mule.env>
 						</properties>
 					</cloudHubDeployment>
 				</configuration>
