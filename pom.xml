@@ -15,7 +15,7 @@
 
 		<app.runtime>4.4.0-20230320</app.runtime>
 		<mule.maven.plugin.version>3.8.2</mule.maven.plugin.version>
-		<cloudhub.application.name>sk-github-actions-poc</cloudhub.application.name>
+		<cloudhub.application.name>sk-github-actions</cloudhub.application.name>
 		<region>us-east-1</region>
 		<workers>1</workers>
 		<workerType>MICRO</workerType>
