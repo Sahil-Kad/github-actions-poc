@@ -24,7 +24,7 @@ jobs:
         distribution: 'temurin'
         java-version: 8
     - name: Test with Maven
-      run: mvn clean test --settings .maven/settings.xml -Dmule.env="dev"
+      run: mvn clean test -Dmule.env="dev" --settings .maven/settings.xml
     - name: Upload MUnit reports
       uses: actions/upload-artifact@v4
       with:
@@ -43,7 +43,7 @@ jobs:
         distribution: 'oracle'
         java-version: 8
     - name: Build with Maven
-      run: mvn -B package --file.pom.xml -DskipMunitTests -Dmule.env="dev"
+      run: mvn -B package --file.pom.xml -Dmule.env="dev" -DskipMunitTests
     - name: Upload artifact 
       uses: actions/upload-artifact@v4
       with:
