@@ -1,5 +1,0 @@
-http:
-  port: "8081"
-
-env:
-  message: "Flow is Dev Environment"
