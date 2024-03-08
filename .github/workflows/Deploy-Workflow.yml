@@ -64,4 +64,4 @@ jobs:
       env:
         CLIENTID: ${{ secrets.anypoint_platform_clientId }}
         CLIENTSECRET: ${{ secrets.anypoint_platform_clientSecret }}
-      run: mvn deploy -X -DskipMunitTests -DmuleDeploy -DClientId="$CLIENTID" -DClientSecret="$CLIENTSECRET" -DGrantType="client_credentials" -Denvironment="DEV" -D"mule.env"="dev"
+      run: mvn deploy -DskipMunitTests -DmuleDeploy -DClientId="4d45de34b3c24abdad60b676fc349f59" -DClientSecret="D78C7Cc5d9534d9Eb6B35c42872364F2" -DGrantType="client_credentials" -Denvironment="DEV" -D"mule.env"="dev"
