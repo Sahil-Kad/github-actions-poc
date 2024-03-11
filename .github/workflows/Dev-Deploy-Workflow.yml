@@ -1,4 +1,4 @@
-name: Test, Build and Deploy
+name: DEV Test, Build and Deploy
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: windows-latest
+    environment: DEV
     steps:
     - name: Checkout this repo
       uses: actions/checkout@v4
@@ -35,6 +36,7 @@ jobs:
   build:
     needs: test
     runs-on: windows-latest
+    environment: DEV
     steps:
     - name: Checkout this repo
       uses: actions/checkout@v4
@@ -61,6 +63,7 @@ jobs:
   deploy-exchange:
     needs: build
     runs-on: windows-latest
+    environment: DEV
     steps:    
     - name: Checkout this repo
       uses: actions/checkout@v4
@@ -81,6 +84,7 @@ jobs:
   deploy-cloudhub:
     needs: deploy-exchange
     runs-on: windows-latest
+    environment: DEV
     steps:    
     - name: Checkout this repo
       uses: actions/checkout@v4
