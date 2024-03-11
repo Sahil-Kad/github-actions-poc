@@ -1,0 +1,82 @@
+name: Test, Build and Deploy
+
+on:
+  push:
+    branches:
+      - dev
+      - feature
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout this repo
+      uses: actions/checkout@v4
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 8
+    - name: Test with Maven
+      run: mvn clean test -D"mule.env"="dev" --settings .maven/settings.xml
+    - name: Upload MUnit reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: munit-test-reports
+        path: target/site/munit/coverage
+
+  build:
+    needs: test
+    runs-on: windows-latest
+    steps:
+    - name: Checkout this repo
+      uses: actions/checkout@v4
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 8
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml -D"mule.env"="dev" -DskipMunitTests
+    - name: Upload artifact 
+      uses: actions/upload-artifact@v4
+      with:
+          name: artifacts
+          path: target/*.jar
+          
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    steps:    
+    - name: Checkout this repo
+      uses: actions/checkout@v4
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: Download the JAR File
+      uses: actions/download-artifact@v4
+      with:
+        name: artifacts
+    - name: Deploy to Dev
+      env:
+        CLIENTID: ${{ secrets.anypoint_platform_clientId }}
+        CLIENTSECRET: ${{ secrets.anypoint_platform_clientSecret }}
+      run: mvn deploy -DskipMunitTests -DmuleDeploy -DClientId="$env:CLIENTID" -DClientSecret="$env:CLIENTSECRET" -DGrantType="client_credentials" -Denvironment="DEV" -D"mule.env"="dev"
