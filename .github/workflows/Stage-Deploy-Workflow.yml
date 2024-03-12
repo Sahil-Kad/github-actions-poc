@@ -25,7 +25,7 @@ jobs:
         distribution: 'temurin'
         java-version: 8
     - name: Test with Maven
-      run: mvn clean test -D"mule.env"="dev" --settings .maven/settings.xml
+      run: mvn test -D"mule.env"="dev" --settings .maven/settings.xml
     - name: Upload MUnit reports
       uses: actions/upload-artifact@v4
       with:
@@ -52,7 +52,7 @@ jobs:
         distribution: 'temurin'
         java-version: 8
     - name: Build with Maven
-      run: mvn -B package --file pom.xml -D"mule.env"="dev" -DskipMunitTests
+      run: mvn -B package --file pom.xml -D"mule.env"="dev" -DskipTests
     - name: Upload artifact 
       uses: actions/upload-artifact@v4
       with:
@@ -78,7 +78,7 @@ jobs:
       with:
         name: artifacts
     - name: Deploy to Exchange
-      run: mvn deploy -DskipMunitTests
+      run: mvn deploy -DskipTests --settings .maven/settings.xml
           
   deploy-cloudhub:
     needs: deploy-exchange
@@ -102,4 +102,4 @@ jobs:
       env:
         CLIENTID: ${{ secrets.anypoint_platform_clientId }}
         CLIENTSECRET: ${{ secrets.anypoint_platform_clientSecret }}
-      run: mvn deploy -DskipMunitTests -DmuleDeploy -DClientId="$env:CLIENTID" -DClientSecret="$env:CLIENTSECRET" -DGrantType="client_credentials" -Denvironment="STAGE" -D"mule.env"="dev"
+      run: mvn deploy -DskipTests -DmuleDeploy -DClientId="$env:CLIENTID" -DClientSecret="$env:CLIENTSECRET" -DGrantType="client_credentials" -Denvironment="STAGE" -D"mule.env"="dev"
